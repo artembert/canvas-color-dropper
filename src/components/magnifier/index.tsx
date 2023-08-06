@@ -1,4 +1,5 @@
 import {memo, useEffect, useMemo, useRef, useState,} from 'react';
+import {createPortal} from "react-dom";
 import {
     borderSizes,
     centralIndex,
@@ -8,9 +9,8 @@ import {
     matrixBasis,
     offset,
 } from './utils.ts';
-import {Portal} from "../portal";
-
-// import Portal from 'components/Portal';
+import {PORTAL_CONTAINER_NODE_ID} from "../../constants.ts";
+import styles from './styles.module.css'
 
 export interface IDropperProps {
     context?: HTMLCanvasElement | null;
@@ -18,9 +18,7 @@ export interface IDropperProps {
     open?: boolean;
 }
 
-// import useStyles from './styles';
-
-const MagnifierComponet = ({context, onChange}: IDropperProps) => {
+const MagnifierComponent = ({context, onChange}: IDropperProps) => {
     const [topLeft, setTopLeft] = useState([0, 0]);
     const [colors, setColors] = useState(defaultColors);
     const [top, left] = topLeft;
@@ -42,7 +40,6 @@ const MagnifierComponet = ({context, onChange}: IDropperProps) => {
     centralColorRef.current = colors[centralIndex][centralIndex];
 
     const
-        borderWhite = '',
         overlay = '',
         overlayWrapper = '',
         // overlaySquare = '',
@@ -105,43 +102,42 @@ const MagnifierComponet = ({context, onChange}: IDropperProps) => {
         }
     }, [context, onChange, clientRect, matrixRepresantationData]);
 
-    return (
-        <Portal
-            container={document.body}
-            isOpen={isVisible}
-        >
-            <div className={borderWhite} style={{top, left}}>
-                <div
-                    className={overlay}
-                    style={{borderColor: colors[centralIndex][centralIndex]}}
-                >
-                    {matrixBasis.map((_: number, index: number) => (
-                        // eslint-disable-next-line
-                        <div key={index} className={overlayWrapper}>
-                            {matrixBasis.map((_: number, itemIndex: number) => {
-                                // const isBorderNeeded = needBorder(itemIndex, index);
-                                return (
-                                    <div
-                                        // eslint-disable-next-line
-                                        key={itemIndex}
-                                        style={{
-                                            background: colors[index][itemIndex],
-                                        }}
-                                    />
-                                );
-                            })}
-                        </div>
-                    ))}
 
-                    <div className={hexLabel}>
+    return (isVisible ?
+        createPortal(
+            (<div className={styles.magnifier} style={{top, left}}>
+                    <div
+                        className={overlay}
+                        style={{borderColor: colors[centralIndex][centralIndex]}}
+                    >
+                        {matrixBasis.map((_: number, index: number) => (
+                            // eslint-disable-next-line
+                            <div key={index} className={overlayWrapper}>
+                                {matrixBasis.map((_: number, itemIndex: number) => {
+                                    // const isBorderNeeded = needBorder(itemIndex, index);
+                                    return (
+                                        <div
+                                            // eslint-disable-next-line
+                                            key={itemIndex}
+                                            style={{
+                                                background: colors[index][itemIndex],
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ))}
+
+                        <div className={hexLabel}>
             <span className={hexValue}>
               {colors[centralIndex][centralIndex].toUpperCase()}
             </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Portal>
-    );
+            ), document.getElementById(PORTAL_CONTAINER_NODE_ID)!
+        ) : null)
 }
 
-export const Magnifier = memo(MagnifierComponet);
+
+export const Magnifier = memo(MagnifierComponent);
