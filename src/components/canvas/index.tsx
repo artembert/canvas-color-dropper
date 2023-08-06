@@ -21,14 +21,15 @@ export const Canvas = ({imageSrc}: Props) => {
             return;
         }
         const aspectRatio = imageRef.current.width / imageRef.current.height;
-        canvasRef.current.width = size.width * devicePixelRatio;
-        canvasRef.current.height = size.height * devicePixelRatio / aspectRatio;
-        ctx.current.scale(devicePixelRatio, devicePixelRatio);
+        const {width, height} = {width: size.width, height: size.width / aspectRatio}
+        canvasRef.current.width = width * devicePixelRatio;
+        canvasRef.current.height = height * devicePixelRatio;
         canvasRef.current.setAttribute('style', convertSizeToCssString({
-            width: size.width,
-            height: size.width / aspectRatio
+            width,
+            height
         }));
-        ctx.current?.drawImage(imageRef.current, 0, 0, size.width, size.height / aspectRatio);
+        ctx.current.scale(devicePixelRatio, devicePixelRatio);
+        ctx.current.drawImage(imageRef.current, 0, 0, width, height);
     }
 
     useEffect(() => {
