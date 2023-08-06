@@ -80,6 +80,6 @@ export const Canvas = ({imageSrc}: Props) => {
 
     return <div className={styles.container} ref={containerRef}>
         <canvas ref={canvasRef} onMouseMove={handleMouseMove}/>
-        {canvasRef.current && <Magnifier open={true} context={canvasRef.current}/>}
+        <Magnifier context={canvasRef.current}/>
     </div>;
 }

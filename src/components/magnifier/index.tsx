@@ -13,7 +13,7 @@ import {Portal} from "../portal";
 // import Portal from 'components/Portal';
 
 export interface IDropperProps {
-    context?: HTMLCanvasElement;
+    context?: HTMLCanvasElement | null;
     onChange?: (color: string, fromDropper: boolean, event: Event) => void;
     open?: boolean;
 }
