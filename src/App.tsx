@@ -6,7 +6,7 @@ import {Toolbox} from "./components/toolbox";
 
 function App() {
     return (
-        <EditorLayout canvas={<Canvas width={1920} height={1080} imageSrc={imageSample}/>} status={<span>#333333</span>}
+        <EditorLayout canvas={<Canvas imageSrc={imageSample}/>} status={<span>#333333</span>}
                       toolbox={<Toolbox/>}/>
     )
 }

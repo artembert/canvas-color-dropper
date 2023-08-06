@@ -5,21 +5,30 @@ import {convertSizeToCssString} from "../../utils/convert-size-to-css-string.ts"
 import styles from './styles.module.css';
 
 type Props = {
-    width: number,
-    height: number,
     imageSrc?: string;
 }
 
-export const Canvas = ({height, width, imageSrc}: Props) => {
+export const Canvas = ({imageSrc}: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const ctx = useRef<CanvasRenderingContext2D | null>(null);
+    const imageRef = useRef<HTMLImageElement | null>(null);
+
+    const devicePixelRatio = window.devicePixelRatio;
 
     const setCssSizes = (size: ISize) => {
-        if (!canvasRef.current) {
+        if (!canvasRef.current || !ctx.current || !imageRef.current) {
             return;
         }
-        canvasRef.current.setAttribute('style', convertSizeToCssString(size));
+        const aspectRatio = imageRef.current.width / imageRef.current.height;
+        canvasRef.current.width = size.width * devicePixelRatio;
+        canvasRef.current.height = size.height * devicePixelRatio / aspectRatio;
+        ctx.current.scale(devicePixelRatio, devicePixelRatio);
+        canvasRef.current.setAttribute('style', convertSizeToCssString({
+            width: size.width,
+            height: size.width / aspectRatio
+        }));
+        ctx.current?.drawImage(imageRef.current, 0, 0, size.width, size.height / aspectRatio);
     }
 
     useEffect(() => {
@@ -41,18 +50,23 @@ export const Canvas = ({height, width, imageSrc}: Props) => {
         if (!imageSrc) {
             return;
         }
-        const img = new Image();
-        img.addEventListener(
+        if (!imageRef.current) {
+            imageRef.current = new Image();
+        }
+        imageRef.current.addEventListener(
             "load",
             () => {
-                ctx.current?.drawImage(img, 0, 0);
+                if (!imageRef.current) {
+                    return
+                }
+                ctx.current?.drawImage(imageRef.current, 0, 0);
             },
             false,
         );
-        img.src = imageSrc;
+        imageRef.current.src = imageSrc;
     }, [imageSrc]);
 
     return <div className={styles.container} ref={containerRef}>
-        <canvas ref={canvasRef} width={width} height={height}/>
+        <canvas ref={canvasRef}/>
     </div>;
 }
