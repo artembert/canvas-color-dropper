@@ -49,57 +49,58 @@ const MagnifierComponent = ({context, onChange}: IDropperProps) => {
 
 
     useEffect(() => {
-        if (context && clientRect && matrixRepresantationData) {
-            const onMouseMove = (event: MouseEvent) => {
-                const {
-                    top: boundTop,
-                    left: boundLeft,
-                    width,
-                    height,
-                } = clientRect;
-                const widthRatio = context.width / width || 1;
-                const heightRatio = context.height / height || 1;
-                const {clientX, clientY} = event;
-                const nextColors = getColorsMatrix(
-                    matrixRepresantationData,
-                    clientX - boundLeft,
-                    clientY - boundTop,
-                    widthRatio,
-                    heightRatio,
-                );
-                // onMouseOver and onMouseLeave works wrong, so we hide dropper when the 'clientX' biggger than 'boundLeft', same for clientY and boundTop
-                if ((clientX <= boundLeft) || (clientY <= boundTop)) {
-                    setIsVisible(false);
-                } else {
-                    setIsVisible(true);
-                }
-
-                setTopLeft([
-                    clientY - offset - borderSizes,
-                    clientX - offset - borderSizes,
-                ]);
-                setColors(nextColors);
-            };
-            const onMouseOver = () => {
-                setIsVisible(true);
-            };
-            const onMouseLeave = () => {
-                setIsVisible(false);
-            };
-
-            const onClick = (e: Event) => onChange ? onChange(centralColorRef.current, true, e) : null;
-
-            context.addEventListener('mousemove', onMouseMove);
-            context.addEventListener('mouseover', onMouseOver);
-            context.addEventListener('mouseleave', onMouseLeave);
-            context.addEventListener('click', onClick);
-            return () => {
-                context.removeEventListener('mousemove', onMouseMove);
-                context.removeEventListener('mouseover', onMouseOver);
-                context.removeEventListener('mouseleave', onMouseLeave);
-                context.removeEventListener('click', onClick);
-            };
+        if (!context || !clientRect || !matrixRepresantationData) {
+            return
         }
+        const onMouseMove = (event: MouseEvent) => {
+            const {
+                top: boundTop,
+                left: boundLeft,
+                width,
+                height,
+            } = clientRect;
+            const widthRatio = context.width / width || 1;
+            const heightRatio = context.height / height || 1;
+            const {clientX, clientY} = event;
+            const nextColors = getColorsMatrix(
+                matrixRepresantationData,
+                clientX - boundLeft,
+                clientY - boundTop,
+                widthRatio,
+                heightRatio,
+            );
+            // onMouseOver and onMouseLeave works wrong, so we hide dropper when the 'clientX' biggger than 'boundLeft', same for clientY and boundTop
+            if ((clientX <= boundLeft) || (clientY <= boundTop)) {
+                setIsVisible(false);
+            } else {
+                setIsVisible(true);
+            }
+
+            setTopLeft([
+                clientY - offset - borderSizes,
+                clientX - offset - borderSizes,
+            ]);
+            setColors(nextColors);
+        };
+        const onMouseOver = () => {
+            setIsVisible(true);
+        };
+        const onMouseLeave = () => {
+            setIsVisible(false);
+        };
+
+        const onClick = (e: Event) => onChange ? onChange(centralColorRef.current, true, e) : null;
+
+        context.addEventListener('mousemove', onMouseMove);
+        context.addEventListener('mouseover', onMouseOver);
+        context.addEventListener('mouseleave', onMouseLeave);
+        context.addEventListener('click', onClick);
+        return () => {
+            context.removeEventListener('mousemove', onMouseMove);
+            context.removeEventListener('mouseover', onMouseOver);
+            context.removeEventListener('mouseleave', onMouseLeave);
+            context.removeEventListener('click', onClick);
+        };
     }, [context, onChange, clientRect, matrixRepresantationData]);
 
 
