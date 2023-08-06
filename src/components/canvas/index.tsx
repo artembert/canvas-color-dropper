@@ -1,8 +1,9 @@
 import {useEffect, useRef} from 'react';
-import {setupContainerResize} from "../../utils/hooks/setupContainerResize.ts";
+import {setupContainerResize} from "../../utils/setupContainerResize.ts";
 import {ISize} from "../../types.ts";
 import {convertSizeToCssString} from "../../utils/convert-size-to-css-string.ts";
 import styles from './styles.module.css';
+import {callInitialContainerSize} from "../../utils/getInitialContainerSize.ts";
 
 type Props = {
     imageSrc?: string;
@@ -57,10 +58,9 @@ export const Canvas = ({imageSrc}: Props) => {
         imageRef.current.addEventListener(
             "load",
             () => {
-                if (!imageRef.current) {
-                    return
+                if (containerRef.current) {
+                    callInitialContainerSize(containerRef.current, setCssSizes)
                 }
-                ctx.current?.drawImage(imageRef.current, 0, 0);
             },
             false,
         );

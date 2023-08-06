@@ -1,4 +1,4 @@
-import {ISize} from "../../types.ts";
+import {ISize} from "../types.ts";
 
 export const onContainerResize = (container: HTMLDivElement, callback: (params: ISize) => void) => {
     const resizeObserver = new ResizeObserver(entries => {
