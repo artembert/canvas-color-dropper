@@ -1,9 +1,10 @@
-import {useEffect, useRef} from 'react';
+import {MouseEvent, useEffect, useRef} from 'react';
 import {setupContainerResize} from "../../utils/setupContainerResize.ts";
 import {ISize} from "../../types.ts";
 import {convertSizeToCssString} from "../../utils/convert-size-to-css-string.ts";
 import styles from './styles.module.css';
 import {callInitialContainerSize} from "../../utils/getInitialContainerSize.ts";
+import {Magnifier} from "../magnifier";
 
 type Props = {
     imageSrc?: string;
@@ -67,7 +68,18 @@ export const Canvas = ({imageSrc}: Props) => {
         imageRef.current.src = imageSrc;
     }, [imageSrc]);
 
+    const handleMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
+        const x = e.movementX;
+        const y = e.movementY;
+        const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
+        if (pixel) {
+            const hexColor = "#" + ("000000" + ((pixel[0] << 16) | (pixel[1] << 8) | pixel[2]).toString(16)).slice(-6);
+            console.log(hexColor)
+        }
+    };
+
     return <div className={styles.container} ref={containerRef}>
-        <canvas ref={canvasRef}/>
+        <canvas ref={canvasRef} onMouseMove={handleMouseMove}/>
+        {canvasRef.current && <Magnifier open={true} context={canvasRef.current}/>}
     </div>;
 }
