@@ -1,0 +1,24 @@
+.editorLayout {
+    background-color: var(--main-bg);
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-gap: 8px;
+}
+
+.header {
+    display: grid;
+    padding: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    background-color: var(--backgrounds-tint-1);
+}
+
+.toolbox {
+
+}
+
+.canvas {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}

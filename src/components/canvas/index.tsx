@@ -1,4 +1,8 @@
 import {useEffect, useRef} from 'react';
+import {setupContainerResize} from "../../utils/hooks/setupContainerResize.ts";
+import {ISize} from "../../types.ts";
+import {convertSizeToCssString} from "../../utils/convert-size-to-css-string.ts";
+import styles from './styles.module.css';
 
 type Props = {
     width: number,
@@ -8,7 +12,15 @@ type Props = {
 
 export const Canvas = ({height, width, imageSrc}: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const ctx = useRef<CanvasRenderingContext2D | null>(null);
+
+    const setCssSizes = (size: ISize) => {
+        if (!canvasRef.current) {
+            return;
+        }
+        canvasRef.current.setAttribute('style', convertSizeToCssString(size));
+    }
 
     useEffect(() => {
         const context2d = canvasRef.current?.getContext('2d')
@@ -16,7 +28,14 @@ export const Canvas = ({height, width, imageSrc}: Props) => {
             ctx.current = context2d
         }
 
-    }, [canvasRef])
+    }, [canvasRef]);
+
+    useEffect(() => {
+        if (!containerRef.current) {
+            return;
+        }
+        setupContainerResize(containerRef.current, setCssSizes)
+    }, [containerRef])
 
     useEffect(() => {
         if (!imageSrc) {
@@ -33,5 +52,7 @@ export const Canvas = ({height, width, imageSrc}: Props) => {
         img.src = imageSrc;
     }, [imageSrc]);
 
-    return <canvas ref={canvasRef} width={width} height={height}/>;
+    return <div className={styles.container} ref={containerRef}>
+        <canvas ref={canvasRef} width={width} height={height}/>
+    </div>;
 }
