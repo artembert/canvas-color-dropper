@@ -26,7 +26,7 @@ export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurren
     const devicePixelRatio = window.devicePixelRatio;
 
     const [coords, setCoords] = useState<[number, number]>([0, 0])
-    const [isPickerShown, setIsPickShown] = useState(false)
+    const [isCursorOnCanvas, setIsCursorOnCanvas] = useState(false)
 
     const setCssSizes = (size: ISize) => {
         if (!canvasRef.current || !ctx.current || !imageRef.current) {
@@ -83,6 +83,9 @@ export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurren
     }, [imageSrc]);
 
     const handleMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
+        if (!(isPickerSelected || isCursorOnCanvas)) {
+            return;
+        }
         const x = (e.clientX - (canvasRef.current?.offsetLeft || 0));
         const y = (e.clientY - (canvasRef.current?.offsetTop || 0));
         const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
@@ -96,18 +99,18 @@ export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurren
 
     const handleMouseEnter = () => {
         if (isPickerSelected) {
-            setIsPickShown(true)
+            setIsCursorOnCanvas(true)
         }
     }
 
     const handleMouseLeave = () => {
-        setIsPickShown(false)
+        setIsCursorOnCanvas(false)
     }
 
     return <div className={styles.container} ref={containerRef}>
         <canvas ref={canvasRef} onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}/>
-        {isPickerShown &&
+        {isCursorOnCanvas &&
             <PixelatedZoomArea image={imageRef.current} currentColor={currentColor} sourceCanvas={canvasRef.current}
                                x={coords[0]}
                                y={coords[1]}/>}
