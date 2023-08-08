@@ -10,6 +10,27 @@
     grid-template-columns: 1fr 1fr;
 }
 
+.colorPickerButton {
+    padding: 8px;
+    border-radius: var(--border-radius);
+    background-color: var(--backgrounds-tint-3);
+    border: none;
+    display: flex;
+    justify-self: left;
+}
+
+.colorPickerButton:hover {
+    background-color: var(--backgrounds-tint-4);
+}
+
+.colorPickerButton:active {
+    background-color: var(--backgrounds-tint-5);
+}
+
+.colorPickerButtonActive {
+    background-color: var(--backgrounds-tint-5);
+}
+
 .currentColor {
     font-family: ui-monospace,
     Menlo, Monaco,
@@ -21,4 +42,12 @@
     "Fira Mono",
     "Droid Sans Mono",
     "Courier New", monospace;
+
+    display: flex;
+    justify-self: left;
+
+    background-color: var(--backgrounds-tint-3);
+    color: var(--texts-base);
+    padding: 0 4px;
+    border-radius: 4px;
 }
