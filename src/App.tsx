@@ -6,7 +6,7 @@ import {Toolbar} from "./components/toolbar";
 import {useCallback, useState} from "react";
 
 function App() {
-    const [isPickerSelected, setIsPickerSelected] = useState(true)
+    const [isPickerSelected, setIsPickerSelected] = useState(false)
     const [currentColor, setCurrentColor] = useState<string>('')
 
     const handlePickerToggle = useCallback(() => {
