@@ -1,0 +1,24 @@
+.toolbar {
+    border-radius: var(--border-radius);
+    gap: 2px;
+    display: grid;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+    grid-auto-flow: column;
+    background-color: var(--backgrounds-tint-1);
+    grid-template-columns: 1fr 1fr;
+}
+
+.currentColor {
+    font-family: ui-monospace,
+    Menlo, Monaco,
+    "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono",
+    "Oxygen Mono",
+    "Ubuntu Monospace",
+    "Source Code Pro",
+    "Fira Mono",
+    "Droid Sans Mono",
+    "Courier New", monospace;
+}

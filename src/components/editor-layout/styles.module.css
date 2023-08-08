@@ -1,5 +1,5 @@
 .editorLayout {
-    background-color: var(--main-bg);
+    background-color: var(--backgrounds-tint-3);
     width: 100%;
     height: 100vh;
     display: grid;
@@ -9,13 +9,29 @@
 
 .header {
     display: grid;
-    padding: 8px;
+    padding: 16px 8px;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     background-color: var(--backgrounds-tint-1);
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
 }
 
-.toolbox {
+.heading {
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+}
 
+.content {
+    display: grid;
+    grid-template-rows: min-content min-content;
+    grid-gap: 8px;
+    align-self: center;
+}
+
+.toolbar {
+    margin: 0 auto;
+    min-width: 400px;
 }
 
 .canvas {

@@ -9,11 +9,16 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 
-    --main-bg: #ededed;
     --backgrounds-tint-1: #f7f7f7;
+    --backgrounds-tint-2: #f2f2f2;
+    --backgrounds-tint-3: #e8e8e8;
+    --backgrounds-tint-4: #dedede;
+    --backgrounds-tint-5: #d4d4d4;
+    --backgrounds-tint-6: #c9c9c9;
 
     --magnifier-size: 190px;
     --picked-color: #ffffff;
+    --border-radius: 8px;
 
     --texts-base: #000000;
 

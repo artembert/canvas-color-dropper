@@ -2,22 +2,24 @@ import styles from './styles.module.css';
 import {ReactNode} from "react";
 
 type Props = {
-    toolbox: ReactNode,
-    status: ReactNode,
+    toolbar: ReactNode,
     canvas: ReactNode,
 };
 
 export const EditorLayout = (props: Props) => {
-    const {canvas, toolbox, status} = props;
+    const {canvas, toolbar} = props;
 
     return (
         <div className={styles.editorLayout}>
             <header className={styles.header}>
-                <div className={styles.logo}></div>
-                <div className={styles.toolbox}>{toolbox}</div>
-                <div className={styles.status}>{status}</div>
+                <h1 className={styles.heading}>Canvas Color Dropper</h1>
             </header>
-            <div className={styles.canvas}>{canvas}</div>
+            <main className={styles.content}>
+                <div className={styles.toolbar}>
+                    {toolbar}
+                </div>
+                <div className={styles.canvas}>{canvas}</div>
+            </main>
         </div>
     );
 };

@@ -9,12 +9,15 @@ import {MAGNIFIER_SIZE} from "../../constants.ts";
 import {resolveHexColor} from "../../utils/canvas/resolve-hex-color.ts";
 
 type Props = {
+    isPickerSelected: boolean;
+    currentColor: string;
+    onChangeCurrentColor: (color: string) => void;
     imageSrc?: string;
 }
 
 const root = document.documentElement;
 
-export const Canvas = ({imageSrc}: Props) => {
+export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurrentColor}: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const ctx = useRef<CanvasRenderingContext2D | null>(null);
@@ -23,8 +26,6 @@ export const Canvas = ({imageSrc}: Props) => {
     const devicePixelRatio = window.devicePixelRatio;
 
     const [coords, setCoords] = useState<[number, number]>([0, 0])
-    const [currentColor, setCurrentColor] = useState<string>('')
-    const [isPickerSelected, setIsPickerSelected] = useState(true)
     const [isPickerShown, setIsPickShown] = useState(false)
 
     const setCssSizes = (size: ISize) => {
@@ -87,7 +88,7 @@ export const Canvas = ({imageSrc}: Props) => {
         const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
         if (pixel) {
             const hex = resolveHexColor(pixel)
-            setCurrentColor(hex);
+            onChangeCurrentColor(hex);
             root.style.setProperty('--picked-color', hex)
         }
         setCoords([x, y])
