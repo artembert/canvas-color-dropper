@@ -48,13 +48,6 @@ export const PixelatedZoomArea = (props: Props) => {
             return;
         }
         drawImage()
-        // canvasRef.current.width = 200 * devicePixelRatio;
-        // canvasRef.current.height = 200 * devicePixelRatio;
-        // canvasRef.current.setAttribute('style', convertSizeToCssString({
-        //     width,
-        //     height
-        // }));
-        // ctx.current?.scale(devicePixelRatio, devicePixelRatio);
     }, [x, y])
 
     return (
