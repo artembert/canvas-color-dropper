@@ -13,5 +13,15 @@
     border-radius: 50%;
     outline: 4px white;
     outline-style: solid;
-    box-shadow: red 0px 0px 0 10px;
+    box-shadow: var(--picked-color) 0 0 0 10px;
+}
+
+.colorHex {
+    position: absolute;
+    bottom: 20%;
+    display: block;
+    background-color: var(--backgrounds-tint-1);
+    color: var(--texts-base);
+    padding: 0 4px;
+    border-radius: 4px;
 }

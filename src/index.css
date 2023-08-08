@@ -12,9 +12,13 @@
     --main-bg: #ededed;
     --backgrounds-tint-1: #f7f7f7;
 
+    --magnifier-size: 190px;
+    --picked-color: #ffffff;
+
+    --texts-base: #000000;
+
     /* z-indexes */
     --magnifier-z-index: 99999;
-    --magnifier-size: 190px;
 }
 
 a {

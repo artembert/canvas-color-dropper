@@ -7,10 +7,13 @@ import {callInitialContainerSize} from "../../utils/getInitialContainerSize.ts";
 import {PixelatedZoomArea} from "../pixelated-zoom-area";
 import {Portal} from "../portal";
 import {MAGNIFIER_SIZE} from "../../constants.ts";
+import {resolveHexColor} from "../../utils/canvas/resolve-hex-color.ts";
 
 type Props = {
     imageSrc?: string;
 }
+
+const root = document.documentElement;
 
 export const Canvas = ({imageSrc}: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -21,6 +24,7 @@ export const Canvas = ({imageSrc}: Props) => {
     const devicePixelRatio = window.devicePixelRatio;
 
     const [coords, setCoords] = useState<[number, number]>([0, 0])
+    const [currentColor, setCurrentColor] = useState<string>('')
 
     const setCssSizes = (size: ISize) => {
         if (!canvasRef.current || !ctx.current || !imageRef.current) {
@@ -39,7 +43,6 @@ export const Canvas = ({imageSrc}: Props) => {
     }
 
     useEffect(() => {
-        const root = document.documentElement;
         root.style.setProperty('--magnifier-size', `${MAGNIFIER_SIZE}px`)
     }, [])
 
@@ -82,8 +85,9 @@ export const Canvas = ({imageSrc}: Props) => {
         const y = (e.clientY - (canvasRef.current?.offsetTop || 0));
         const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
         if (pixel) {
-            const hexColor = "#" + ("000000" + ((pixel[0] << 16) | (pixel[1] << 8) | pixel[2]).toString(16)).slice(-6);
-            console.log(hexColor)
+            const hex = resolveHexColor(pixel)
+            setCurrentColor(hex);
+            root.style.setProperty('--picked-color', hex)
         }
         setCoords([x, y])
     };
@@ -92,7 +96,8 @@ export const Canvas = ({imageSrc}: Props) => {
         <canvas ref={canvasRef} onMouseMove={handleMouseMove}/>
         {/*<Magnifier context={canvasRef.current}/>*/}
         <Portal>
-            <PixelatedZoomArea image={imageRef.current} sourceCanvas={canvasRef.current} x={coords[0]}
+            <PixelatedZoomArea image={imageRef.current} currentColor={currentColor} sourceCanvas={canvasRef.current}
+                               x={coords[0]}
                                y={coords[1]}/>
         </Portal>
 
