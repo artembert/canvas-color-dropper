@@ -10,7 +10,7 @@ function App() {
     const [currentColor, setCurrentColor] = useState<string>('')
 
     const handlePickerToggle = useCallback(() => {
-        setIsPickerSelected(!isPickerSelected)
+        setIsPickerSelected(val => !val)
     }, [])
 
     return (
