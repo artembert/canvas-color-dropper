@@ -1,10 +1,11 @@
-import {MouseEvent, useEffect, useRef} from 'react';
+import {MouseEvent, useEffect, useRef, useState} from 'react';
 import {setupContainerResize} from "../../utils/setupContainerResize.ts";
 import {ISize} from "../../types.ts";
 import {convertSizeToCssString} from "../../utils/convert-size-to-css-string.ts";
 import styles from './styles.module.css';
 import {callInitialContainerSize} from "../../utils/getInitialContainerSize.ts";
-import {Magnifier} from "../magnifier";
+import {PixelatedZoomArea} from "../pixelated-zoom-area";
+import {Portal} from "../portal";
 
 type Props = {
     imageSrc?: string;
@@ -17,6 +18,8 @@ export const Canvas = ({imageSrc}: Props) => {
     const imageRef = useRef<HTMLImageElement | null>(null);
 
     const devicePixelRatio = window.devicePixelRatio;
+
+    const [coords, setCoords] = useState<[number, number]>([0, 0])
 
     const setCssSizes = (size: ISize) => {
         if (!canvasRef.current || !ctx.current || !imageRef.current) {
@@ -69,17 +72,23 @@ export const Canvas = ({imageSrc}: Props) => {
     }, [imageSrc]);
 
     const handleMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
-        const x = e.movementX;
-        const y = e.movementY;
+        const x = (e.clientX - (canvasRef.current?.offsetLeft || 0)) * devicePixelRatio;
+        const y = (e.clientY - (canvasRef.current?.offsetTop || 0)) * devicePixelRatio;
         const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
         if (pixel) {
             const hexColor = "#" + ("000000" + ((pixel[0] << 16) | (pixel[1] << 8) | pixel[2]).toString(16)).slice(-6);
             console.log(hexColor)
         }
+        setCoords([x, y])
     };
 
     return <div className={styles.container} ref={containerRef}>
         <canvas ref={canvasRef} onMouseMove={handleMouseMove}/>
-        <Magnifier context={canvasRef.current}/>
+        {/*<Magnifier context={canvasRef.current}/>*/}
+        <Portal>
+            <PixelatedZoomArea image={imageRef.current} sourceCanvas={canvasRef.current} x={coords[0]}
+                               y={coords[1]}/>
+        </Portal>
+
     </div>;
 }

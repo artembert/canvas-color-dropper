@@ -1,0 +1,13 @@
+.pixelatedZoomArea {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    pointer-events: none;
+    overflow: hidden;
+    left: 0;
+    right: 0;
+    transform: translate(-50%, 50%);
+}
