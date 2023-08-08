@@ -1,5 +1,6 @@
 import {useEffect, useRef} from "react";
 import styles from './styles.module.css';
+import {MAGNIFICATION_FACTOR, MAGNIFIER_SIZE} from "../../constants.ts";
 
 type Props = {
     sourceCanvas?: HTMLCanvasElement | null,
@@ -30,11 +31,14 @@ export const PixelatedZoomArea = (props: Props) => {
         }
         ctx.current?.drawImage(
             sourceCanvas,
-            Math.min(Math.max(0, x - 5), image.width - 10),
-            Math.min(Math.max(0, y - 5), image.height - 10),
-            10, 10,
-            0, 0,
-            200, 200
+            x - MAGNIFIER_SIZE / (2 * MAGNIFICATION_FACTOR),
+            y - MAGNIFIER_SIZE / (2 * MAGNIFICATION_FACTOR),
+            MAGNIFIER_SIZE / MAGNIFICATION_FACTOR,
+            MAGNIFIER_SIZE / MAGNIFICATION_FACTOR,
+            0,
+            0,
+            MAGNIFIER_SIZE,
+            MAGNIFIER_SIZE
         );
     }
 
@@ -54,7 +58,7 @@ export const PixelatedZoomArea = (props: Props) => {
 
     return (
         <div className={styles.pixelatedZoomArea} style={{left: x / devicePixelRatio, top: y / devicePixelRatio}}>
-            <canvas width={200} height={200} ref={canvasRef}/>
+            <canvas width={MAGNIFIER_SIZE} height={MAGNIFIER_SIZE} ref={canvasRef}/>
         </div>
     );
 };

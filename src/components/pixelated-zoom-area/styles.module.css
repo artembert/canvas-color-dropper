@@ -1,6 +1,6 @@
 .pixelatedZoomArea {
-    width: 200px;
-    height: 200px;
+    width: var(--magnifier-size);
+    height: var(--magnifier-size);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,6 +8,10 @@
     pointer-events: none;
     overflow: hidden;
     left: 0;
-    right: 0;
-    transform: translate(-50%, 50%);
+    top: 0;
+    transform: translate(-50%, 0);
+    border-radius: 50%;
+    outline: 4px white;
+    outline-style: solid;
+    box-shadow: red 0px 0px 0 10px;
 }

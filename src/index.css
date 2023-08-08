@@ -13,7 +13,8 @@
     --backgrounds-tint-1: #f7f7f7;
 
     /* z-indexes */
-    --magnifier-z-index: 99999
+    --magnifier-z-index: 99999;
+    --magnifier-size: 190px;
 }
 
 a {

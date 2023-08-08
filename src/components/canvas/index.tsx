@@ -6,6 +6,7 @@ import styles from './styles.module.css';
 import {callInitialContainerSize} from "../../utils/getInitialContainerSize.ts";
 import {PixelatedZoomArea} from "../pixelated-zoom-area";
 import {Portal} from "../portal";
+import {MAGNIFIER_SIZE} from "../../constants.ts";
 
 type Props = {
     imageSrc?: string;
@@ -36,6 +37,11 @@ export const Canvas = ({imageSrc}: Props) => {
         ctx.current.scale(devicePixelRatio, devicePixelRatio);
         ctx.current.drawImage(imageRef.current, 0, 0, width, height);
     }
+
+    useEffect(() => {
+        const root = document.documentElement;
+        root.style.setProperty('--magnifier-size', `${MAGNIFIER_SIZE}px`)
+    }, [])
 
     useEffect(() => {
         const context2d = canvasRef.current?.getContext('2d')
@@ -72,8 +78,8 @@ export const Canvas = ({imageSrc}: Props) => {
     }, [imageSrc]);
 
     const handleMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
-        const x = (e.clientX - (canvasRef.current?.offsetLeft || 0)) * devicePixelRatio;
-        const y = (e.clientY - (canvasRef.current?.offsetTop || 0)) * devicePixelRatio;
+        const x = (e.clientX - (canvasRef.current?.offsetLeft || 0));
+        const y = (e.clientY - (canvasRef.current?.offsetTop || 0));
         const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
         if (pixel) {
             const hexColor = "#" + ("000000" + ((pixel[0] << 16) | (pixel[1] << 8) | pixel[2]).toString(16)).slice(-6);
