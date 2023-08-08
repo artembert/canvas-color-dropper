@@ -5,7 +5,6 @@ import {convertSizeToCssString} from "../../utils/convert-size-to-css-string.ts"
 import styles from './styles.module.css';
 import {callInitialContainerSize} from "../../utils/getInitialContainerSize.ts";
 import {PixelatedZoomArea} from "../pixelated-zoom-area";
-import {Portal} from "../portal";
 import {MAGNIFIER_SIZE} from "../../constants.ts";
 import {resolveHexColor} from "../../utils/canvas/resolve-hex-color.ts";
 
@@ -25,6 +24,8 @@ export const Canvas = ({imageSrc}: Props) => {
 
     const [coords, setCoords] = useState<[number, number]>([0, 0])
     const [currentColor, setCurrentColor] = useState<string>('')
+    const [isPickerSelected, setIsPickerSelected] = useState(true)
+    const [isPickerShown, setIsPickShown] = useState(false)
 
     const setCssSizes = (size: ISize) => {
         if (!canvasRef.current || !ctx.current || !imageRef.current) {
@@ -92,14 +93,22 @@ export const Canvas = ({imageSrc}: Props) => {
         setCoords([x, y])
     };
 
+    const handleMouseEnter = () => {
+        if (isPickerSelected) {
+            setIsPickShown(true)
+        }
+    }
+
+    const handleMouseLeave = () => {
+        setIsPickShown(false)
+    }
+
     return <div className={styles.container} ref={containerRef}>
-        <canvas ref={canvasRef} onMouseMove={handleMouseMove}/>
-        {/*<Magnifier context={canvasRef.current}/>*/}
-        <Portal>
+        <canvas ref={canvasRef} onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}/>
+        {isPickerShown &&
             <PixelatedZoomArea image={imageRef.current} currentColor={currentColor} sourceCanvas={canvasRef.current}
                                x={coords[0]}
-                               y={coords[1]}/>
-        </Portal>
-
+                               y={coords[1]}/>}
     </div>;
 }
