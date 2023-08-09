@@ -7,7 +7,7 @@ import {useCallback, useState} from "react";
 
 function App() {
     const [isPickerSelected, setIsPickerSelected] = useState(false)
-    const [currentColor, setCurrentColor] = useState<string>('')
+    const [selectedColor, setSelectedColor] = useState<string>('')
 
     const handlePickerToggle = useCallback(() => {
         setIsPickerSelected(val => !val)
@@ -15,9 +15,9 @@ function App() {
 
     return (
         <EditorLayout
-            canvas={<Canvas isPickerSelected={isPickerSelected} currentColor={currentColor} imageSrc={imageSample}
-                            onChangeCurrentColor={setCurrentColor}/>}
-            toolbar={<Toolbar isPickerSelected={isPickerSelected} currentColor={currentColor}
+            canvas={<Canvas isPickerSelected={isPickerSelected} imageSrc={imageSample}
+                            onChangeSelectedColor={setSelectedColor}/>}
+            toolbar={<Toolbar isPickerSelected={isPickerSelected} selectedColor={selectedColor}
                               onTogglePicker={handlePickerToggle}/>}/>
     )
 }

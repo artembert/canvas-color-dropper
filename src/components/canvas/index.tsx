@@ -10,14 +10,17 @@ import {resolveHexColor} from "../../utils/canvas/resolve-hex-color.ts";
 
 type Props = {
     isPickerSelected: boolean;
-    currentColor: string;
-    onChangeCurrentColor: (color: string) => void;
+    onChangeSelectedColor: (color: string) => void;
     imageSrc?: string;
 }
 
 const root = document.documentElement;
 
-export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurrentColor}: Props) => {
+export const Canvas = ({
+                           isPickerSelected,
+                           imageSrc,
+                           onChangeSelectedColor
+                       }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const ctx = useRef<CanvasRenderingContext2D | null>(null);
@@ -25,6 +28,7 @@ export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurren
 
     const devicePixelRatio = window.devicePixelRatio;
 
+    const [currentColor, setCurrentColor] = useState<string>('')
     const [coords, setCoords] = useState<[number, number]>([0, 0])
     const [isCursorOnCanvas, setIsCursorOnCanvas] = useState(false)
 
@@ -83,20 +87,38 @@ export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurren
     }, [imageSrc]);
 
     const handleMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
-        if (!(isPickerSelected || isCursorOnCanvas)) {
+        const pixelData = getSelectedPixel(e);
+        if (!pixelData) {
             return;
+        }
+        const {x, y, hex} = pixelData;
+        setCoords([x, y])
+        setCurrentColor(hex);
+        root.style.setProperty('--picked-color', hex)
+    };
+
+    const handleMouseClick = (e: MouseEvent<HTMLCanvasElement>) => {
+        const pixelData = getSelectedPixel(e);
+        if (!pixelData) {
+            return;
+        }
+        const {hex} = pixelData;
+        onChangeSelectedColor(hex);
+    };
+
+    const getSelectedPixel = (e: MouseEvent<HTMLCanvasElement>): { x: number, y: number, hex: string } | null => {
+        if (!(isPickerSelected || isCursorOnCanvas)) {
+            return null;
         }
         const coords = canvasRef.current?.getBoundingClientRect();
         const x = (e.clientX - (coords?.x || 0)) * devicePixelRatio;
         const y = (e.clientY - (coords?.y || 0)) * devicePixelRatio;
         const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
-        if (pixel) {
-            const hex = resolveHexColor(pixel)
-            onChangeCurrentColor(hex);
-            root.style.setProperty('--picked-color', hex)
+        const hex = pixel ? resolveHexColor(pixel) : '#000000';
+        return {
+            x, y, hex
         }
-        setCoords([x, y])
-    };
+    }
 
     const handleMouseEnter = () => {
         if (isPickerSelected) {
@@ -109,7 +131,7 @@ export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurren
     }
 
     return <div className={styles.container} ref={containerRef}>
-        <canvas ref={canvasRef} onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter}
+        <canvas ref={canvasRef} onMouseMove={handleMouseMove} onClick={handleMouseClick} onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}/>
         {isCursorOnCanvas &&
             <PixelatedZoomArea image={imageRef.current} currentColor={currentColor} sourceCanvas={canvasRef.current}
