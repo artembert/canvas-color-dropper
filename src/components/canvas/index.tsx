@@ -1,4 +1,4 @@
-import {MouseEvent, useEffect, useRef, useState} from 'react';
+import {MouseEvent, useCallback, useEffect, useRef, useState} from 'react';
 import {setupContainerResize} from "../../utils/setupContainerResize.ts";
 import {ISize} from "../../types.ts";
 import {convertSizeToCssString} from "../../utils/convert-size-to-css-string.ts";
@@ -38,7 +38,7 @@ export const Canvas = ({
     const [coords, setCoords] = useState<[number, number]>([0, 0])
     const [isCursorOnCanvas, setIsCursorOnCanvas] = useState(false)
 
-    const setCssSizes = (size: ISize) => {
+    const setCssSizes = useCallback((size: ISize) => {
         if (!canvasRef.current || !ctx.current || !imageRef.current) {
             return;
         }
@@ -52,7 +52,7 @@ export const Canvas = ({
         }));
         ctx.current.scale(devicePixelRatio, devicePixelRatio);
         ctx.current.drawImage(imageRef.current, 0, 0, width, height);
-    }
+    }, [devicePixelRatio])
 
     useEffect(() => {
         root.style.setProperty('--magnifier-size', `${MAGNIFIER_SIZE}px`)
@@ -71,7 +71,7 @@ export const Canvas = ({
             return;
         }
         setupContainerResize(containerRef.current, setCssSizes)
-    }, [containerRef])
+    }, [containerRef, setCssSizes])
 
     useEffect(() => {
         if (!imageSrc) {
@@ -90,29 +90,9 @@ export const Canvas = ({
             false,
         );
         imageRef.current.src = imageSrc;
-    }, [imageSrc]);
+    }, [imageSrc, setCssSizes]);
 
-    const handleMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
-        const pixelData = getSelectedPixel(e);
-        if (!pixelData) {
-            return;
-        }
-        const {x, y, hex} = pixelData;
-        setCoords([x, y])
-        setCurrentColor(hex);
-        root.style.setProperty('--picked-color', hex)
-    };
-
-    const handleMouseClick = (e: MouseEvent<HTMLCanvasElement>) => {
-        const pixelData = getSelectedPixel(e);
-        if (!pixelData) {
-            return;
-        }
-        const {hex} = pixelData;
-        onChangeSelectedColor(hex);
-    };
-
-    const getSelectedPixel = (e: MouseEvent<HTMLCanvasElement>): PixelMeta | null => {
+    const getSelectedPixel = useCallback((e: MouseEvent<HTMLCanvasElement>): PixelMeta | null => {
         if (!(isPickerSelected || isCursorOnCanvas)) {
             return null;
         }
@@ -124,17 +104,38 @@ export const Canvas = ({
         return {
             x, y, hex
         }
-    }
+    }, [devicePixelRatio, isCursorOnCanvas, isPickerSelected])
 
-    const handleMouseEnter = () => {
+    const handleMouseMove = useCallback((e: MouseEvent<HTMLCanvasElement>) => {
+        const pixelData = getSelectedPixel(e);
+        if (!pixelData) {
+            return;
+        }
+        const {x, y, hex} = pixelData;
+        setCoords([x, y])
+        setCurrentColor(hex);
+        root.style.setProperty('--picked-color', hex)
+    }, [getSelectedPixel]);
+
+    const handleMouseClick = useCallback((e: MouseEvent<HTMLCanvasElement>) => {
+        const pixelData = getSelectedPixel(e);
+        if (!pixelData) {
+            return;
+        }
+        const {hex} = pixelData;
+        onChangeSelectedColor(hex);
+    }, [getSelectedPixel, onChangeSelectedColor]);
+
+
+    const handleMouseEnter = useCallback(() => {
         if (isPickerSelected) {
             setIsCursorOnCanvas(true)
         }
-    }
+    }, [isPickerSelected])
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = useCallback(() => {
         setIsCursorOnCanvas(false)
-    }
+    }, [])
 
     return <div className={styles.container} ref={containerRef}>
         <canvas ref={canvasRef} onMouseMove={handleMouseMove} onClick={handleMouseClick} onMouseEnter={handleMouseEnter}
