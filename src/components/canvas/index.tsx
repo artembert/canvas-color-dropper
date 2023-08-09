@@ -87,8 +87,8 @@ export const Canvas = ({isPickerSelected, imageSrc, currentColor, onChangeCurren
             return;
         }
         const coords = canvasRef.current?.getBoundingClientRect();
-        const x = (e.clientX - (coords?.x || 0));
-        const y = (e.clientY - (coords?.y || 0));
+        const x = (e.clientX - (coords?.x || 0)) * devicePixelRatio;
+        const y = (e.clientY - (coords?.y || 0)) * devicePixelRatio;
         const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
         if (pixel) {
             const hex = resolveHexColor(pixel)
