@@ -9,7 +9,7 @@
     overflow: hidden;
     left: 0;
     top: 0;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
     border-radius: 50%;
     outline: 4px white;
     outline-style: solid;
