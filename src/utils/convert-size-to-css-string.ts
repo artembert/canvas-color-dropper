@@ -1,5 +1,5 @@
-import {ISize} from "../types.ts";
+import { ISize } from "../types.ts";
 
 export const convertSizeToCssString = (size: ISize): string => {
-    return `width: ${size.width}px; height: ${size.height}px;`
-}
+  return `width: ${size.width}px; height: ${size.height}px;`;
+};

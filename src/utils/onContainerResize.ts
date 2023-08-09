@@ -1,21 +1,24 @@
-import {ISize} from "../types.ts";
+import { ISize } from "../types.ts";
 
-export const onContainerResize = (container: HTMLDivElement, callback: (params: ISize) => void) => {
-    const resizeObserver = new ResizeObserver(entries => {
-        window.requestAnimationFrame(() => {
-            if (!Array.isArray(entries) || !entries.length) {
-                return;
-            }
-            const [entry] = entries;
+export const onContainerResize = (
+  container: HTMLDivElement,
+  callback: (params: ISize) => void,
+) => {
+  const resizeObserver = new ResizeObserver((entries) => {
+    window.requestAnimationFrame(() => {
+      if (!Array.isArray(entries) || !entries.length) {
+        return;
+      }
+      const [entry] = entries;
 
-            const {
-                contentRect: {width, height},
-            } = entry;
+      const {
+        contentRect: { width, height },
+      } = entry;
 
-            callback({width, height});
-        });
+      callback({ width, height });
     });
+  });
 
-    resizeObserver.observe(container);
-    return () => resizeObserver.unobserve(container);
+  resizeObserver.observe(container);
+  return () => resizeObserver.unobserve(container);
 };
