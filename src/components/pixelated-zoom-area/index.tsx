@@ -7,7 +7,7 @@ type Props = {
     image?: HTMLImageElement | null,
     x: number,
     y: number,
-    currentColor: string;
+    currentColor: string | null;
 };
 
 export const PixelatedZoomArea = (props: Props) => {

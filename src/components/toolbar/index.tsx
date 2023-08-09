@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 
 type Props = {
     isPickerSelected: boolean;
-    selectedColor?: string;
+    selectedColor: string | null;
     onTogglePicker: VoidFunction;
 };
 
@@ -16,7 +16,7 @@ export const Toolbar = (props: Props) => {
                     type='button' onClick={onTogglePicker}>
                 <img src={pickerIcon} alt={'Color Picker icon'}/>
             </button>
-            {isPickerSelected &&
+            {isPickerSelected && selectedColor &&
                 <div className={styles.selectedColor} style={{backgroundColor: selectedColor}}>
                     {selectedColor}
                 </div>

@@ -7,10 +7,15 @@ import {useCallback, useState} from "react";
 
 function App() {
     const [isPickerSelected, setIsPickerSelected] = useState(false)
-    const [selectedColor, setSelectedColor] = useState<string>('')
+    const [selectedColor, setSelectedColor] = useState<string | null>(null)
 
     const handlePickerToggle = useCallback(() => {
-        setIsPickerSelected(val => !val)
+        setIsPickerSelected(val => {
+            if (val) {
+                setSelectedColor(null);
+            }
+            return !val
+        });
     }, [])
 
     return (

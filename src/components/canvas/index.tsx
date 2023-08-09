@@ -10,8 +10,14 @@ import {resolveHexColor} from "../../utils/canvas/resolve-hex-color.ts";
 
 type Props = {
     isPickerSelected: boolean;
-    onChangeSelectedColor: (color: string) => void;
+    onChangeSelectedColor: (color: string | null) => void;
     imageSrc?: string;
+}
+
+type PixelMeta = {
+    x: number,
+    y: number,
+    hex: string | null
 }
 
 const root = document.documentElement;
@@ -28,7 +34,7 @@ export const Canvas = ({
 
     const devicePixelRatio = window.devicePixelRatio;
 
-    const [currentColor, setCurrentColor] = useState<string>('')
+    const [currentColor, setCurrentColor] = useState<string | null>(null)
     const [coords, setCoords] = useState<[number, number]>([0, 0])
     const [isCursorOnCanvas, setIsCursorOnCanvas] = useState(false)
 
@@ -106,7 +112,7 @@ export const Canvas = ({
         onChangeSelectedColor(hex);
     };
 
-    const getSelectedPixel = (e: MouseEvent<HTMLCanvasElement>): { x: number, y: number, hex: string } | null => {
+    const getSelectedPixel = (e: MouseEvent<HTMLCanvasElement>): PixelMeta | null => {
         if (!(isPickerSelected || isCursorOnCanvas)) {
             return null;
         }
@@ -114,7 +120,7 @@ export const Canvas = ({
         const x = (e.clientX - (coords?.x || 0)) * devicePixelRatio;
         const y = (e.clientY - (coords?.y || 0)) * devicePixelRatio;
         const pixel = ctx.current?.getImageData(x, y, 1, 1).data;
-        const hex = pixel ? resolveHexColor(pixel) : '#000000';
+        const hex = pixel ? resolveHexColor(pixel) : null;
         return {
             x, y, hex
         }
