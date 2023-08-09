@@ -53,6 +53,7 @@ export const PixelatedZoomArea = (props: Props) => {
     return (
         <div className={styles.pixelatedZoomArea} style={{left: x / devicePixelRatio, top: y / devicePixelRatio}}>
             <canvas width={MAGNIFIER_SIZE} height={MAGNIFIER_SIZE} ref={canvasRef}/>
+            <div className={styles.target}></div>
             <span className={styles.colorHex}>{currentColor}</span>
         </div>
     );
