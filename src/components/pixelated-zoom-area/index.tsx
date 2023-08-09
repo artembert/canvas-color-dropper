@@ -47,7 +47,7 @@ export const PixelatedZoomArea = (props: Props) => {
       return;
     }
     drawImage();
-  }, [x, y]);
+  }, [drawImage, x, y]);
 
   return (
     <div
