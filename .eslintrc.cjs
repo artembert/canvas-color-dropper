@@ -5,6 +5,8 @@ module.exports = {
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:react-hooks/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
         "prettier",
     ],
     ignorePatterns: ["dist", ".eslintrc.cjs"],
@@ -15,5 +17,8 @@ module.exports = {
             "warn",
             {allowConstantExport: true},
         ],
+        "import/order": [
+            "error"
+        ]
     },
 };

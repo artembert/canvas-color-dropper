@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
-import styles from "./styles.module.css";
 import { MAGNIFICATION_FACTOR, MAGNIFIER_SIZE } from "../../constants.ts";
+import styles from "./styles.module.css";
 
 type Props = {
   sourceCanvas?: HTMLCanvasElement | null;

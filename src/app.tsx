@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import imageSample from "./assets/image-sample.jpg";
-import "./app.css";
 import { Canvas } from "./components/canvas";
 import { EditorLayout } from "./components/editor-layout";
 import { Toolbar } from "./components/toolbar";
+import "./app.css";
 
 function App() {
   const [isPickerSelected, setIsPickerSelected] = useState(false);

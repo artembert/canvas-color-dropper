@@ -1,5 +1,5 @@
-import { onContainerResize } from "./on-container-resize.ts";
 import { ISize } from "../types.ts";
+import { onContainerResize } from "./on-container-resize.ts";
 
 export const setupContainerResize = (
   containerDivElement: HTMLDivElement,
