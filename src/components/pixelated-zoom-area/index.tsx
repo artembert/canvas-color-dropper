@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 import { MAGNIFICATION_FACTOR, MAGNIFIER_SIZE } from "../../constants.ts";
 
@@ -25,7 +25,7 @@ export const PixelatedZoomArea = (props: Props) => {
     }
   }, [canvasRef]);
 
-  const drawImage = () => {
+  const drawImage = useCallback(() => {
     if (!sourceCanvas || !image) {
       return;
     }
@@ -40,7 +40,7 @@ export const PixelatedZoomArea = (props: Props) => {
       MAGNIFIER_SIZE,
       MAGNIFIER_SIZE,
     );
-  };
+  }, [image, sourceCanvas, x, y]);
 
   useEffect(() => {
     if (!canvasRef.current) {
