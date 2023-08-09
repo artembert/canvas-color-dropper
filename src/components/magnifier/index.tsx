@@ -10,7 +10,7 @@ type Props = {
   currentColor: string | null;
 };
 
-export const PixelatedZoomArea = (props: Props) => {
+export const Magnifier = (props: Props) => {
   const { sourceCanvas, x, y, image, currentColor } = props;
 
   const devicePixelRatio = window.devicePixelRatio;

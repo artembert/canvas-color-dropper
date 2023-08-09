@@ -2,11 +2,11 @@ import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { setupContainerResize } from "../../utils/setup-container-resize.ts";
 import { ISize } from "../../types.ts";
 import { convertSizeToCssString } from "../../utils/convert-size-to-css-string.ts";
-import styles from "./styles.module.css";
 import { callInitialContainerSize } from "../../utils/call-initial-container-size.ts";
-import { PixelatedZoomArea } from "../pixelated-zoom-area";
+import { Magnifier } from "../magnifier";
 import { MAGNIFIER_SIZE } from "../../constants.ts";
 import { resolveHexColor } from "../../utils/resolve-hex-color.ts";
+import styles from "./styles.module.css";
 
 type Props = {
   isPickerSelected: boolean;
@@ -165,7 +165,7 @@ export const Canvas = ({
         onMouseLeave={handleMouseLeave}
       />
       {isCursorOnCanvas && (
-        <PixelatedZoomArea
+        <Magnifier
           image={imageRef.current}
           currentColor={currentColor}
           sourceCanvas={canvasRef.current}
