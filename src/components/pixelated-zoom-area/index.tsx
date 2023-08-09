@@ -18,7 +18,7 @@ export const PixelatedZoomArea = (props: Props) => {
     const ctx = useRef<CanvasRenderingContext2D | null>(null);
 
     useEffect(() => {
-        const context2D = canvasRef.current?.getContext('2d')
+        const context2D = canvasRef.current?.getContext('2d', {alpha: false})
         if (context2D) {
             ctx.current = context2D
             ctx.current.imageSmoothingEnabled = false;

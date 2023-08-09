@@ -59,7 +59,7 @@ export const Canvas = ({
     }, [])
 
     useEffect(() => {
-        const context2d = canvasRef.current?.getContext('2d')
+        const context2d = canvasRef.current?.getContext('2d', {alpha: false})
         if (context2d) {
             ctx.current = context2d
         }
