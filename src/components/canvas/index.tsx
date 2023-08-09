@@ -22,6 +22,9 @@ type PixelMeta = {
 
 const root = document.documentElement;
 
+let lastMouseEvent: MouseEvent<HTMLCanvasElement> | null = null;
+let drawingScheduled = false;
+
 export const Canvas = ({
   isPickerSelected,
   imageSrc,
@@ -119,8 +122,31 @@ export const Canvas = ({
     [devicePixelRatio, isCursorOnCanvas, isPickerSelected],
   );
 
+  const updateMagnifier = useCallback(() => {
+    if (lastMouseEvent) {
+      const pixelData = getSelectedPixel(lastMouseEvent);
+      if (!pixelData) {
+        return;
+      }
+      const { x, y, hex } = pixelData;
+      setCoords([x, y]);
+      setCurrentColor(hex);
+      root.style.setProperty("--picked-color", hex);
+
+      lastMouseEvent = null;
+    }
+
+    drawingScheduled = false;
+  }, [getSelectedPixel]);
+
   const handleMouseMove = useCallback(
     (e: MouseEvent<HTMLCanvasElement>) => {
+      lastMouseEvent = e; // Store the latest event
+      if (!drawingScheduled) {
+        drawingScheduled = true;
+        requestAnimationFrame(updateMagnifier);
+      }
+
       const pixelData = getSelectedPixel(e);
       if (!pixelData) {
         return;
@@ -130,7 +156,7 @@ export const Canvas = ({
       setCurrentColor(hex);
       root.style.setProperty("--picked-color", hex);
     },
-    [getSelectedPixel],
+    [getSelectedPixel, updateMagnifier],
   );
 
   const handleMouseClick = useCallback(
