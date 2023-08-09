@@ -17,7 +17,10 @@ export const Toolbar = (props: Props) => {
                 <img src={pickerIcon} alt={'Color Picker icon'}/>
             </button>
             {isPickerSelected &&
-                <div className={styles.selectedColor}>{selectedColor}</div>}
+                <div className={styles.selectedColor} style={{backgroundColor: selectedColor}}>
+                    {selectedColor}
+                </div>
+            }
         </div>
     );
 };

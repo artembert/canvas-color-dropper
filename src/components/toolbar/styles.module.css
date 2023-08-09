@@ -46,8 +46,11 @@
     display: flex;
     justify-self: left;
 
-    background-color: var(--backgrounds-tint-3);
     color: var(--texts-base);
     padding: 0 4px;
     border-radius: 4px;
+    text-shadow: -1px -1px 0 #ffffff50,
+    1px -1px 0 #ffffff50,
+    -1px 1px 0 #ffffff50,
+    1px 1px 0 #ffffff50;
 }
