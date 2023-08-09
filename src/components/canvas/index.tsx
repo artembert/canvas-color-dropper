@@ -192,7 +192,6 @@ export const Canvas = ({
       />
       {isCursorOnCanvas && (
         <Magnifier
-          image={imageRef.current}
           currentColor={currentColor}
           sourceCanvas={canvasRef.current}
           x={coords[0]}

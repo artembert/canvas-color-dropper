@@ -4,18 +4,25 @@ import styles from "./styles.module.css";
 
 type Props = {
   sourceCanvas?: HTMLCanvasElement | null;
-  image?: HTMLImageElement | null;
   x: number;
   y: number;
   currentColor: string | null;
 };
 
 export const Magnifier = (props: Props) => {
-  const { sourceCanvas, x, y, image, currentColor } = props;
+  const { sourceCanvas, x, y, currentColor } = props;
 
   const devicePixelRatio = window.devicePixelRatio;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctx = useRef<CanvasRenderingContext2D | null>(null);
+
+  const offscreenCanvasRef = useRef<OffscreenCanvas>(
+    new OffscreenCanvas(MAGNIFIER_SIZE, MAGNIFIER_SIZE),
+  );
+  const offscreenCtx = useRef<OffscreenCanvasRenderingContext2D>(
+    offscreenCanvasRef.current!.getContext("2d", { alpha: false }),
+  );
+  offscreenCtx.current!.imageSmoothingEnabled = false;
 
   useEffect(() => {
     const context2D = canvasRef.current?.getContext("2d", { alpha: false });
@@ -26,10 +33,10 @@ export const Magnifier = (props: Props) => {
   }, [canvasRef]);
 
   const drawImage = useCallback(() => {
-    if (!sourceCanvas || !image) {
+    if (!sourceCanvas || !offscreenCtx) {
       return;
     }
-    ctx.current?.drawImage(
+    offscreenCtx.current?.drawImage(
       sourceCanvas,
       x - MAGNIFIER_SIZE / (2 * MAGNIFICATION_FACTOR),
       y - MAGNIFIER_SIZE / (2 * MAGNIFICATION_FACTOR),
@@ -40,7 +47,8 @@ export const Magnifier = (props: Props) => {
       MAGNIFIER_SIZE,
       MAGNIFIER_SIZE,
     );
-  }, [image, sourceCanvas, x, y]);
+    ctx.current?.drawImage(offscreenCanvasRef.current, 0, 0);
+  }, [offscreenCtx, sourceCanvas, x, y]);
 
   useEffect(() => {
     if (!canvasRef.current) {
