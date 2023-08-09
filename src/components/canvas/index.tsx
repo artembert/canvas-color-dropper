@@ -1,12 +1,12 @@
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
-import { setupContainerResize } from "../../utils/setupContainerResize.ts";
+import { setupContainerResize } from "../../utils/setup-container-resize.ts";
 import { ISize } from "../../types.ts";
 import { convertSizeToCssString } from "../../utils/convert-size-to-css-string.ts";
 import styles from "./styles.module.css";
-import { callInitialContainerSize } from "../../utils/getInitialContainerSize.ts";
+import { callInitialContainerSize } from "../../utils/call-initial-container-size.ts";
 import { PixelatedZoomArea } from "../pixelated-zoom-area";
 import { MAGNIFIER_SIZE } from "../../constants.ts";
-import { resolveHexColor } from "../../utils/canvas/resolve-hex-color.ts";
+import { resolveHexColor } from "../../utils/resolve-hex-color.ts";
 
 type Props = {
   isPickerSelected: boolean;

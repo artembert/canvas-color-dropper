@@ -1,4 +1,4 @@
-import { onContainerResize } from "./onContainerResize.ts";
+import { onContainerResize } from "./on-container-resize.ts";
 import { ISize } from "../types.ts";
 
 export const setupContainerResize = (
